@@ -59,6 +59,9 @@ def create_quaternions(array_of_nv):
 def main():
     quaternions = create_quaternions(normal_vectors)
 
+    # Add testing for normal vectors
+    print(quaternions)
+
 
 if __name__ == "__main__":
     main()
