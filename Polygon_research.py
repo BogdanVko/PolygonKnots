@@ -1,6 +1,7 @@
 #  Created by Bogdan Vasilchenko on 02/Oct/2019
 
 import numpy
+import scipy.linalg
 """  Generating Quaternion Vectors.
 
         Step One -> Get 2 arrays of Complex Vectors [(Real,Imaginary),
@@ -15,18 +16,6 @@ import numpy
         [R, fi, fj, fk] <--- Result
 
 """
-
-initial_amount_of_complex_vectors = 100  # STUB
-array_of_complex_vectors1 = []
-array_of_complex_vectors2 = []
-normal_vectors = []
-
-
-# Get a random float from a Gaussian Distribution. @return float
-def random_number():
-    number = 1  # STUB for now. Should be a random number from Gaussian Distribution
-    return number
-
 def generate_random_vectors(size):
     """
     :param size: length of the complex vector arrays (ex.: size = 5 => there will be 5 random complex vectors)
@@ -37,33 +26,42 @@ def generate_random_vectors(size):
     mean =0
     stdDiv = 0.1
     array_of_complex_vectors = numpy.random.normal(mean, stdDiv, shape_to_generate)
-    return array_of_complex_vectors
+    array_of_complex_vectors = array_of_complex_vectors[:,0]+array_of_complex_vectors[:,1]*1j
+    return array_of_complex_vectors.reshape(-1,1)
 
-# Fill 2 arrays of complex vectors. @param number of vectors to make; @fill the array of vectors
-array_of_complex_vectors1 = generate_random_vectors(initial_amount_of_complex_vectors)
-array_of_complex_vectors2 = generate_random_vectors(initial_amount_of_complex_vectors)
 
-# Perform Gram-schmidt to create an array of
+# Perform Gram-schmidt to create an array of orthogonalized vectors
 def gram_schmidt(array_of_vectors1, array_of_vectors2):
-    array_of_normal_vectors = []  # Puts in 2 tuples per []. 2 tuples/vectors are normal to each other
+    array_of_vectors=numpy.hstack((array_of_vectors1,array_of_vectors2))
+    array_of_normal_vectors = scipy.linalg.orth(array_of_vectors)
     return array_of_normal_vectors
 
-
-# Normal vectors
-normal_vectors = gram_schmidt(array_of_complex_vectors1, array_of_complex_vectors2)
 
 
 def create_quaternions(array_of_nv):
     array_of_quaternions = []
     return array_of_quaternions
 
+def testNormalVectorsWithBounds(lowerBound,vector1,vector2,upperBound,message=""):
+    value = numpy.vdot(vector1,vector2)
+    assert lowerBound<=value<=upperBound, message
 
-def main():
-    quaternions = create_quaternions(normal_vectors)
+def main(size):   
+    # Fill 2 arrays of complex vectors. @param number of vectors to make; @fill the array of vectors
+    array_of_complex_vectors1 = generate_random_vectors(size)
+    array_of_complex_vectors2 = generate_random_vectors(size)
 
-    # Add testing for normal vectors
-    print(quaternions)
+    # Normal vectors
+    normal_vectors = gram_schmidt(array_of_complex_vectors1,array_of_complex_vectors2)
 
+    #Test if vectors are normal by taking their dot-product
+    testNormalVectorsWithBounds((-1e-15-1e-15j),normal_vectors[:,0],normal_vectors[:,1],(1e-15+1e-15j), "u*v is too far from 0")
+    testNormalVectorsWithBounds((1-1e-15-1e-15j),normal_vectors[:,0],normal_vectors[:,0],(1+1e-15+1e-15j), "u*u is too far from 1")
+    testNormalVectorsWithBounds((1-1e-15-1e-15j),normal_vectors[:,1],normal_vectors[:,1],(1+1e-15+1e-15j), "v*v is too far from 1")
+    
+    
+    return normal_vectors
 
 if __name__ == "__main__":
-    main()
+    main(5)
+    
