@@ -46,6 +46,13 @@ def testNormalVectorsWithBounds(lowerBound,vector1,vector2,upperBound,message=""
     value = numpy.vdot(vector1,vector2)
     assert lowerBound<=value<=upperBound, message
 
+def two_complex_to_four_floats(array_of_two_complex):
+    array_of_4_floats = numpy.hstack((
+        array_of_two_complex[:,0].real.reshape(-1,1), array_of_two_complex[:,0].imag.reshape(-1,1),
+        array_of_two_complex[:,1].real.reshape(-1,1), array_of_two_complex[:,1].imag.reshape(-1,1)
+        ))
+    return array_of_4_floats
+    
 def main(size):   
     # Fill 2 arrays of complex vectors. @param number of vectors to make; @fill the array of vectors
     array_of_complex_vectors1 = generate_random_vectors(size)
