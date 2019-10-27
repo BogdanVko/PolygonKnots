@@ -47,9 +47,9 @@ def create_quaternions(array_of_nv):
     # Come back
     for i in array_of_nv:
         real = i[0].real
-        ei = i[0].imag
-        j = i[1].real
-        k = i[1].imag
+        ei = i[0].imag * 1j
+        j = i[1].real * 1j
+        k = i[1].imag * 1j
         quaternions.append((real, ei, j, k))
 
     return quaternions
