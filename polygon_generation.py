@@ -29,9 +29,11 @@ def generate_random_vectors(size):
     array_of_complex_vectors = array_of_complex_vectors[:,0]+array_of_complex_vectors[:,1]*1j
     return array_of_complex_vectors.reshape(-1,1)
 
-
-# Perform Gram-schmidt to create an array of orthogonalized vectors
+ 
 def gram_schmidt(array_of_vectors1, array_of_vectors2):
+    '''Perform Gram-schmidt to create an array of orthogonalized vectors
+    To do that easily, inputs should be arrays of complex numbers.
+    '''
     array_of_vectors=numpy.hstack((array_of_vectors1,array_of_vectors2))
     array_of_normal_vectors = scipy.linalg.orth(array_of_vectors)
     return array_of_normal_vectors
@@ -104,6 +106,11 @@ def create_polygon_edge_vector(size):
 
     return polygon_edges
 
-if __name__ == "__main__":
-    create_polygon_edge_vector(5)
+def polygon_edge_vector_to_vertices(polygon_edges):
+    return numpy.cumsum(polygon_edges,axis=0)
+
+def polygon_edges_and_vertices(size):
+    edge_vector = create_polygon_edge_vector(size)
+    vertex_vector = polygon_edge_vector_to_vertices(edge_vector)
+    return edge_vector,vertex_vector
     
