@@ -2,6 +2,7 @@
 
 import numpy
 import scipy.linalg
+
 """  Generating Quaternion Vectors.
 
         Step One -> Get 2 arrays of Complex Vectors [(Real,Imaginary),
@@ -13,38 +14,51 @@ import scipy.linalg
 
         Step Three -> Transform the array of complex vectors into an array of Quaternion vectors.
 
+
         [R, fi, fj, fk] <--- Result
 
 """
+
+
 def generate_random_vectors(size):
     """
     :param size: length of the complex vector arrays (ex.: size = 5 => there will be 5 random complex vectors)
     :return: returns a tuple of 2 arrays of complex vectors, each array has a provided length and 2 values for each vector: real and imaginary parts
     mean, standard deviation, and number of values per vector are hardcoded to be specific for this project
     """
-    shape_to_generate=(size,2)
-    mean =0
+    shape_to_generate = (size, 2)
+    mean = 0
     stdDiv = 0.1
     array_of_complex_vectors = numpy.random.normal(mean, stdDiv, shape_to_generate)
-    array_of_complex_vectors = array_of_complex_vectors[:,0]+array_of_complex_vectors[:,1]*1j
-    return array_of_complex_vectors.reshape(-1,1)
+    array_of_complex_vectors = array_of_complex_vectors[:, 0] + array_of_complex_vectors[:, 1] * 1j
+    return array_of_complex_vectors.reshape(-1, 1)
 
 
 # Perform Gram-schmidt to create an array of orthogonalized vectors
 def gram_schmidt(array_of_vectors1, array_of_vectors2):
-    array_of_vectors=numpy.hstack((array_of_vectors1,array_of_vectors2))
+    array_of_vectors = numpy.hstack((array_of_vectors1, array_of_vectors2))
     array_of_normal_vectors = scipy.linalg.orth(array_of_vectors)
     return array_of_normal_vectors
 
 
-
 def create_quaternions(array_of_nv):
-    array_of_quaternions = []
-    return array_of_quaternions
+    quaternions = []
 
-def testNormalVectorsWithBounds(lowerBound,vector1,vector2,upperBound,message=""):
-    value = numpy.vdot(vector1,vector2)
-    assert lowerBound<=value<=upperBound, message
+    # Come back
+    for i in array_of_nv:
+        real = i[0].real
+        ei = i[0].imag * 1j
+        j = i[1].real * 1j
+        k = i[1].imag * 1j
+        quaternions.append((real, ei, j, k))
+
+    return quaternions
+
+
+def test_normal_vectors_with_bounds(lowerBound, vector1, vector2, upperBound, message=""):
+    value = numpy.vdot(vector1, vector2)
+    assert lowerBound <= value <= upperBound, message
+
 
 def test_normal_vectors(normal_vectors_of_complex):
     #Test if vectors are normal by taking their dot-product
@@ -54,9 +68,9 @@ def test_normal_vectors(normal_vectors_of_complex):
 
 def two_complex_to_quaternion(array_of_two_complex):
     array_of_4_floats = numpy.hstack((
-        array_of_two_complex[:,0].real.reshape(-1,1), array_of_two_complex[:,0].imag.reshape(-1,1),
-        array_of_two_complex[:,1].real.reshape(-1,1), array_of_two_complex[:,1].imag.reshape(-1,1)
-        ))
+        array_of_two_complex[:, 0].real.reshape(-1, 1), array_of_two_complex[:, 0].imag.reshape(-1, 1),
+        array_of_two_complex[:, 1].real.reshape(-1, 1), array_of_two_complex[:, 1].imag.reshape(-1, 1)
+    ))
     return array_of_4_floats
 
 def create_single_polygon_edge_from_quaternion(quaternion):
@@ -104,6 +118,6 @@ def create_polygon_edge_vector(size):
 
     return polygon_edges
 
+
 if __name__ == "__main__":
     create_polygon_edge_vector(5)
-    
