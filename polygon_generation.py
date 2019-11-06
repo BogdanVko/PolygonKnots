@@ -104,13 +104,13 @@ def create_polygon_edge_vector(size):
     #Test if polygon has enclosed shape (or if it close enough). To have faster execution over precision - use wider bounds of acceptance
     testPolygonEnclosionWithBounds(polygon_edges,-1e-15,1e-15,"Polygon is too far from enclosed - try again and get lucky or use wider bounds")
 
-    return polygon_edges
+    return polygon_edges,[array_of_complex_vectors1,array_of_complex_vectors2]
 
 def polygon_edge_vector_to_vertices(polygon_edges):
     return numpy.cumsum(polygon_edges,axis=0)
 
 def polygon_edges_and_vertices(size):
-    edge_vector = create_polygon_edge_vector(size)
+    edge_vector,initial_random_vectors = create_polygon_edge_vector(size)
     vertex_vector = polygon_edge_vector_to_vertices(edge_vector)
-    return edge_vector,vertex_vector
+    return edge_vector,vertex_vector,initial_random_vectors
     
