@@ -1,3 +1,5 @@
+import pickle
+
 import snappy
 from pyknotid.spacecurves import SpaceCurve
 
@@ -24,10 +26,11 @@ class Knot:
     edges = []
     vertices = []
     initial_random_vectors = []
-    
+    num_sticks = None
     knot_ID = None
 
     def __init__(self, num_sticks):        
+        self.num_sticks = num_sticks
         #keep regerating polygon untill in looks fine by its edge computation accuracy
         bad_polygons =0
         succeffully_generated_polygon = False
@@ -41,7 +44,19 @@ class Knot:
                 if(bad_polygons>=10):
                     print("WARNING: "+str(bad_polygon)+" polygons in a row were bad. Consider changing margin of error")
 
+        #identify knot using the provided libraries
         with suppress_stdout():                
             k = SpaceCurve(self.vertices)
             PD = k.planar_diagram()
-        knot_ID = snappy.Link(PD).exterior().identify()
+        snappyID =  snappy.Link(PD).exterior().identify()
+        #snappy id has its own type, while we are only concerned with the string values
+        self.knot_ID =[m.name() for m in snappyID]
+
+    def save(self, filename):
+        pickle_out = open(filename,"wb")
+        pickle.dump(self, pickle_out)
+        pickle_out.close()
+    
+def load_knot(filename):
+    pickle_in = open(filename,"rb")
+    return pickle.load(pickle_in)
