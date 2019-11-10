@@ -1,4 +1,5 @@
 import Knot as knot_lib
+import sys
 
 '''
 Function to generate plenty of knots and identify them. 
@@ -13,7 +14,7 @@ def generate_random_interesting_knot(size):
         ID = k.knot_ID
         if empty_knots_num%10000 ==0:
             print("Empty: "+str(empty_knots_num))
-    print("Took "+str(empty_knots_num)+" to generate this one")
+    print("Took "+str(empty_knots_num)+" to generate this one: "+str(k.knot_ID))
     
     return k
 
@@ -47,7 +48,9 @@ def table_lookup(k,knot_table):
 
 
 if __name__ == "__main__":
+    if len(sys.argv[0])<2:
+        raise RuntimeError("Expecting argument woth a number of sticks")        
     knot_table = retrieve_table()
     while(True):
-        k = generate_random_interesting_knot(10)
+        k = generate_random_interesting_knot(int(sys.argv[1]))
         table_lookup(k,knot_table)
