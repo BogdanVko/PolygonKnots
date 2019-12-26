@@ -46,11 +46,19 @@ def table_lookup(k,knot_table):
             k.save(filename)
             knot_table[knot_type] = k.num_sticks
 
+def main(num_sticks, num_knots=None):
+    knot_table = retrieve_table()
+    knot_counter = 0
+    while num_knots is None or num_knots > knot_counter:
+        k = generate_random_interesting_knot(num_sticks)
+        table_lookup(k, knot_table)
+        knot_counter += 1
 
 if __name__ == "__main__":
-    if len(sys.argv[0])<2:
-        raise RuntimeError("Expecting argument woth a number of sticks")        
-    knot_table = retrieve_table()
-    while(True):
-        k = generate_random_interesting_knot(int(sys.argv[1]))
-        table_lookup(k,knot_table)
+    if len(sys.argv) < 2:
+        raise RuntimeError("Expecting argument with a number of sticks")
+    if len(sys.argv) < 3:
+        num_knots = None
+    else:
+        num_knots = int(sys.argv[2])
+    main(int(sys.argv[1]), num_knots)
