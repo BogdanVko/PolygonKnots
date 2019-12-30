@@ -1,0 +1,22 @@
+name: MathProjectKnots
+channels:
+  - defaults
+dependencies:
+  - cython=0.29.14
+  - jupyter
+  - numpy
+  - pip
+  - python=3.7.5
+  - sympy=1.5
+  - wheel=0.33.6
+  - pip:    
+    - peewee==3.13.1
+    - planarity==0.4.1
+    - plink==2.3
+    - pyknotid==0.5.3
+    - pypng==0.0.20
+    - requests==2.22.0
+    - scipy==1.4.1
+    - snakeviz==2.0.1
+    - snappy==2.7
+prefix: /opt/conda/envs/MathProjectKnots

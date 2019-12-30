@@ -90,7 +90,7 @@ if __name__=="__main__":
     for _ in range(0,number_of_knots):
         k=Knot(stick_number)    
         L=compute_L(k)
-        if k.knot_ID == []:
+        if k.get_ID() == []:
             empty.write(L)       
             num_empty+=1     
         else:
