@@ -11,10 +11,10 @@ def generate_random_interesting_knot(size):
     while ID ==[]:        
         k = knot_lib.Knot(size)        
         empty_knots_num +=1       
-        ID = k.knot_ID
+        ID = k.get_ID()
         if empty_knots_num%10000 ==0:
             print("Empty: "+str(empty_knots_num))
-    print("Took "+str(empty_knots_num)+" to generate this one: "+str(k.knot_ID))
+    print("Took "+str(empty_knots_num)+" to generate this one: "+str(k.get_ID()))
     
     return k
 
@@ -35,7 +35,7 @@ def retrieve_table():
     return knot_table
 
 def table_lookup(k,knot_table):
-    for knot_type in k.knot_ID:
+    for knot_type in k.get_ID():
         filename = knot_type+"-in-"+str(k.num_sticks)+".knot"
         if knot_type not in knot_table:
             print("New knot type: "+knot_type)
